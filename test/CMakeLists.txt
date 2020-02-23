@@ -6,3 +6,9 @@ file(GLOB TEST_SRC
 
 add_executable(smoke catch.hpp ${TEST_SRC})
 target_link_libraries(smoke arugula_lib)
+
+add_custom_target(valgrind
+  COMMAND valgrind --leak-check=yes ./smoke
+  DEPENDS smoke
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
