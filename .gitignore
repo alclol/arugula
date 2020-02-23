@@ -1,0 +1,8 @@
+**/*.o
+smoke
+perf
+*.swp
+build/
+**/cmake-*
+**/.idea/*
+*.xml
