@@ -100,54 +100,54 @@ public:
   //   return os;
   // }
 
-  typedef struct MaxStruct Max;
-  typedef struct MinStruct Min;
-  typedef struct OrStruct Or;
-  typedef struct AndStruct And;
-  typedef struct UnionStruct Union;
-  typedef struct MapUnionStruct MapUnion;
-  typedef struct CausalMergeStruct CausalMerge;
+//  typedef struct MaxStruct Max;
+//  typedef struct MinStruct Min;
+//  typedef struct OrStruct Or;
+//  typedef struct AndStruct And;
+//  typedef struct UnionStruct Union;
+//  typedef struct MapUnionStruct MapUnion;
+//  typedef struct CausalMergeStruct CausalMerge;
+//
+//  //lmax
+//
+//  template <class QFunc = Func>
+//  typename std::enable_if_t<std::is_same<QFunc, Max>::value, Lattice<bool, Or>>
+//  greater_than(T n) {
+//      return Lattice(n < this->reveal(), Or{});
+//  }
+//
+//  template <class QFunc = Func>
+//  typename std::enable_if_t<std::is_same<QFunc, Max>::value, Lattice<bool, Or>>
+//  greater_than_or_equal(T n) {
+//      return Lattice(n <= this->reveal(); , Or{});
+//  }
+//
+//  //lmin
+//
+//  template <class QFunc = Func>
+//  typename std::enable_if_t<std::is_same<QFunc, Min>::value, Lattice<bool, Or>>
+//  less_than(T n) {
+//      return Lattice(n > this->reveal(), Or{});
+//  }
+//
+//  template <class QFunc = Func>
+//  typename std::enable_if_t<std::is_same<QFunc, Min>::value, Lattice<bool, Or>>
+//  less_than_or_equal(T n) {
+//      return Lattice(n >= this->reveal();, Or{});
+//  }
 
-  //lmax
-
-  template <class QFunc = Func>
-  typename std::enable_if_t<std::is_same<QFunc, Max>::value, Lattice<bool, Or>>
-  greater_than(T n) {
-      return Lattice(n < this->reveal(), Or{});
-  }
-
-  template <class QFunc = Func>
-  typename std::enable_if_t<std::is_same<QFunc, Max>::value, Lattice<bool, Or>>
-  greater_than_or_equal(T n) {
-      return Lattice(n <= this->reveal(); , Or{});
-  }
-
-  //lmin
-
-  template <class QFunc = Func>
-  typename std::enable_if_t<std::is_same<QFunc, Min>::value, Lattice<bool, Or>>
-  less_than(T n) {
-      return Lattice(n > this->reveal(), Or{});
-  }
-
-  template <class QFunc = Func>
-  typename std::enable_if_t<std::is_same<QFunc, Min>::value, Lattice<bool, Or>>
-  less_than_or_equal(T n) {
-      return Lattice(n >= this->reveal();, Or{});
-  }
-
-  template <class K, class vT, class Q = T, class QFunc = Func>
-  typename std::enable_if_t<std::is_same<Q, std::map<K, vT>>::value&& std::is_same<QFunc, MapUnion>::value, vT>
-  At(K key) {
-      return this->reveal().at(key);
-  }
+//  template <class K, class vT, class Q = T, class QFunc = Func>
+//  typename std::enable_if_t<std::is_same<Q, std::map<K, vT>>::value&& std::is_same<QFunc, MapUnion>::value, vT>
+//  At(K key) {
+//      return this->reveal().at(key);
+//  }
 
   //idom : for kvs use only
-  template <class tuple_first, class tuple_second, class Q = T, class QFunc = Func>
-  typename std::enable_if_t<std::is_same<Q, std::tuple<tuple_first, tuple_second>>::value&& std::is_same<QFunc, CausalMerge>::value, tuple_second>
-  get_value() {
-      return std::get<1>(this->reveal());
-  }
+//  template <class tuple_first, class tuple_second, class Q = T, class QFunc = Func>
+//  typename std::enable_if_t<std::is_same<Q, std::tuple<tuple_first, tuple_second>>::value&& std::is_same<QFunc, CausalMerge>::value, tuple_second>
+//  get_value() {
+//      return std::get<1>(this->reveal());
+//  }
 };
 
 #endif // #ifndef LATTICE_CORE_H
