@@ -15,6 +15,7 @@ TEST_CASE("L_MAX Morphisms") {
    Lattice l2(static_cast<int>(16),Max{});
    l1 += l2;
    auto res1 = greater_than(l1, 12);
-   res = res + res1;
+   res += res1.reveal();
+//   res = res + res1;
    REQUIRE(res.reveal());
 }

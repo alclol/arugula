@@ -5,7 +5,7 @@
 typedef struct OrStruct {
   template <typename T, typename F, template <typename, typename> class L>
   auto operator()(const L<T, F> &left, const L<T, F> &right) const {
-    return left.reveal() || right.reveal();
+    return left.reveal()? left : right;
   }
   friend std::ostream &operator<<(std::ostream &os, const struct OrStruct m) {
     os << "Or";
