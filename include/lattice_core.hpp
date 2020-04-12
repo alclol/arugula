@@ -98,6 +98,32 @@ public:
   //   os << "[" << (l.reveal()) << ", " << l.merge_op() << "]";
   //   return os;
   // }
+
+  typedef struct MaxStruct Max;
+  typedef struct OrStruct Or;
+  typedef struct MapUnionStruct MapUnion;
+  typedef struct CausalMergeStruct CausalMerge;
+
+  template <class QFunc = Func>
+  typename std::enable_if_t<std::is_same<QFunc, Max>::value, Lattice<bool, Or>>
+      greater_than(T n) {
+      T l_val = this->reveal();
+      bool result = n < l_val;
+      return Lattice(result, Or{});
+  }
+
+  template <class K, class vT, class Q = T, class QFunc = Func>
+  typename std::enable_if_t<std::is_same<Q, std::map<K, vT>>::value&& std::is_same<QFunc, MapUnion>::value, vT>
+      At(K key) {
+      return this->reveal().at(key);
+  }
+
+  //idom : for kvs use only
+  //template <class Q = T, class QFunc = Func>
+  //typename std::enable_if_t<std::is_same<Q, std::tuple>::value&& std::is_same<QFunc, CausalMerge>::value, Lattice>
+  //get_value() {
+  //    return std::get<1>(this->reveal());
+  //}
 };
 
 #endif // #ifndef LATTICE_CORE_H
