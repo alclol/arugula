@@ -107,7 +107,7 @@ TEST_CASE("SetIntersect") {
 }
 
 TEST_CASE("SetIntersect merges") {
-  std::set<int> lefts({1, 2, 30});
+  std::set<int> lefts({2, 1, 30});
   std::set<int> rights({1, 2, 3});
   std::set<int> others({2, 300});
 
@@ -117,12 +117,12 @@ TEST_CASE("SetIntersect merges") {
   ls += rs;
   REQUIRE(ls.reveal().size() == 2);
   for (auto i : {1,2}) {
-    REQUIRE(ls.reveal().find(i) != ls.reveal().end());
+    REQUIRE(ls.reveal().count(i));
   }
 
   ls += others;
   REQUIRE(ls.reveal().size() == 1);
-  REQUIRE(ls.reveal().find(2) != ls.reveal().end());
+  REQUIRE(ls.reveal().count(2));
 }
 
 TEST_CASE("UnorderedSetUnion") {
