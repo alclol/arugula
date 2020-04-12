@@ -95,10 +95,10 @@ public:
   }
   bool operator!=(const Lattice<T, Func>& rhs) const { return !(operator==(rhs)); }
 
-  // friend std::ostream& operator<<(std::ostream& os, const Lattice<T, Func>& l) {
-  //   os << "[" << (l.reveal()) << ", " << l.merge_op() << "]";
-  //   return os;
-  // }
+//  friend std::ostream& operator<<(std::ostream& os, const Lattice<T, Func>& l) {
+//    os << "[" << (l.reveal()) << ", " << l.merge_op() << "]";
+//    return os;
+//  }
 
 //  typedef struct MaxStruct Max;
 //  typedef struct MinStruct Min;
@@ -108,34 +108,6 @@ public:
 //  typedef struct MapUnionStruct MapUnion;
 //  typedef struct CausalMergeStruct CausalMerge;
 //
-//  //lmax
-//
-//  template <class QFunc = Func>
-//  typename std::enable_if_t<std::is_same<QFunc, Max>::value, Lattice<bool, Or>>
-//  greater_than(T n) {
-//      return Lattice(n < this->reveal(), Or{});
-//  }
-//
-//  template <class QFunc = Func>
-//  typename std::enable_if_t<std::is_same<QFunc, Max>::value, Lattice<bool, Or>>
-//  greater_than_or_equal(T n) {
-//      return Lattice(n <= this->reveal(); , Or{});
-//  }
-//
-//  //lmin
-//
-//  template <class QFunc = Func>
-//  typename std::enable_if_t<std::is_same<QFunc, Min>::value, Lattice<bool, Or>>
-//  less_than(T n) {
-//      return Lattice(n > this->reveal(), Or{});
-//  }
-//
-//  template <class QFunc = Func>
-//  typename std::enable_if_t<std::is_same<QFunc, Min>::value, Lattice<bool, Or>>
-//  less_than_or_equal(T n) {
-//      return Lattice(n >= this->reveal();, Or{});
-//  }
-
 //  template <class K, class vT, class Q = T, class QFunc = Func>
 //  typename std::enable_if_t<std::is_same<Q, std::map<K, vT>>::value&& std::is_same<QFunc, MapUnion>::value, vT>
 //  At(K key) {

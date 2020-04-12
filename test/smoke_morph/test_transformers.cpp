@@ -6,27 +6,17 @@
 #include "merges/setop_mrg.hpp"
 #include "merges/boolean_mrg.hpp"
 #include "merges/lww_mrg.hpp"
-#include "morphisms/greater_than.hpp"
-
-TEST_CASE("L_MAX Morphisms") {
-   Lattice l1(static_cast<int>(10),Max{});
-   Lattice<bool, Or> res = greater_than(l1, 12);
-   REQUIRE(!res.reveal());
-   Lattice l2(static_cast<int>(16),Max{});
-   l1 += l2;
-   auto res1 = greater_than(l1, 12);
-   res += res1;
-   REQUIRE(res.reveal());
-}
+#include "morphisms/transformer.hpp"
 
 TEST_CASE("L_MAX Morphisms functor") {
    Lattice l1(static_cast<int>(10),Max{});
-   GreaterThanStruct<int> gt(12);
-   Lattice<bool, Or> res = gt(l1);
+   Lattice goal(static_cast<int>(12),Max{});
+   auto gt = CompareTransformer(std::cref(goal), std::cref(l1));
+   Lattice<bool, Or> res = gt.greater_than();
    REQUIRE(!res.reveal());
    Lattice l2(static_cast<int>(16),Max{});
    l1 += l2;
-   auto res1 = gt(l1);
+   auto res1 = gt.greater_than();
    res += res1;
    REQUIRE(res.reveal());
 }
