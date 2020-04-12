@@ -12,7 +12,6 @@ TEST_CASE("L_MAX Morphisms") {
    Lattice f(false, Or{});
    Lattice t(true, Or{});
    Lattice l1(std::make_tuple(Lattice(static_cast<int>(10),Max{}), Lattice(10,Max{})), LWWMerge{});
-   greater_than =
    auto res = greater_than(l1, 12);
    REQUIRE(!res.reveal());
    Lattice l2(std::make_tuple(Lattice(static_cast<int>(16),Max{}), Lattice(5,Max{})), LWWMerge{});
