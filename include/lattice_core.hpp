@@ -16,7 +16,7 @@
 template<class T, class Func>
 struct Lattice
 {
-private:
+public:
   T val;
   const Func mrg;
 public:
@@ -52,7 +52,10 @@ public:
   const Func& merge_op() const { return mrg; }
   // a bunch of lattice wrapping and unwrapping here; might be nice to refactor
   // the merge functions to work on revealed value
-  void merge(const Lattice<T, Func>& l) { val = merge_op()(*this, l).reveal(); }
+  void merge(const Lattice<T, Func>& l) {
+     val = merge_op()(*this, l).reveal();
+  }
+
   void merge(const T& v) { 
     Lattice<T, Func> l = Lattice<T, Func>(v);
     this->merge(l); 

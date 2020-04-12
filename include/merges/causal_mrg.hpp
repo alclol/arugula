@@ -16,7 +16,8 @@ typedef struct CausalMergeStruct {
 
     vl += vr;
 
-    Lattice<T, F> value(std::get<1>(right.reveal())); // set to 
+    // Lattice<T, F> value(std::get<1>(left.reveal())); // set to
+    Lattice<T, F> value(std::get<1>(right.reveal())); // set to
     if (vl == vr) {
       // already initialized
       // value = std::get<1>(right.reveal());

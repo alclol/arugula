@@ -26,12 +26,13 @@ typedef struct UnionStruct {
 } Union;
 
 // Intersect merge operator for lattices whose domain has .merge() defined
-// Currently seems pretty expensive: lots of copies!
+// Assume working with sorted set so it is possible to make l and r const
+// and avoid copies.
 typedef struct IntersectStruct {
   template <typename T, typename F, template <typename, typename> class L>
   auto operator()(const L<T, F> &left, const L<T, F> &right) const {
-    T l = left.reveal();
-    T r = right.reveal();
+    const T& l = left.reveal();
+    const T& r = right.reveal();
     T out;
     auto it = std::set_intersection(l.begin(), l.end(), r.begin(), r.end(),
                                     std::inserter(out, out.begin()));
