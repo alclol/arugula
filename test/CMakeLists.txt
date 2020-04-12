@@ -4,7 +4,7 @@ file(GLOB TEST_SRC
     "smoke/*.cpp"
 )
 
-add_executable(smoke catch.hpp ${TEST_SRC})
+add_executable(smoke catch.hpp ${TEST_SRC} transformers/test_transformers.cpp)
 target_link_libraries(smoke arugula_lib)
 
 add_custom_target(valgrind
