@@ -7,7 +7,7 @@
 #ifndef MANGO_GREATER_THAN_H
 #define MANGO_GREATER_THAN_H
 
-// potentially multithread unsafe!
+// potentially multi-thread unsafe!
 template <class T>
 struct CompareTransformer {
 private:
@@ -42,10 +42,27 @@ public:
     }
 };
 
+template <bool X, bool Y>
+struct TempOr { static constexpr bool val {X || Y}; };
+
 template <class Func, class T>
-typename std::enable_if_t<std::is_same<Func, Max>::value, Lattice<bool, Or>>
+typename std::enable_if_t< std::is_same<Func, Max>::value, Lattice<bool, T> >
 greater_than(Lattice<T, Func> obj, T n) {
    return Lattice(obj.reveal()>n, Or{});
+}
+
+template <class T, class Func>
+typename std::enable_if_t< TempOr<std::is_same<Func, Max>::value, std::is_same<Func, Min>::value>::val, Lattice<T, Func> >
+add_delta (const Lattice<T, Func>& target, const T& delta) {
+  T data = target.reveal() + delta;
+  return Lattice(data, Func{});
+}
+
+template <class T, class Func>
+typename std::enable_if_t< TempOr<std::is_same<Func, Max>::value, std::is_same<Func, Min>::value>::val, Lattice<T, Func> >
+deduct_delta (const Lattice<T, Func>& target, const T& delta) {
+   T data = target.reveal() - delta;
+   return Lattice(data, Func{});
 }
 
 #endif //MANGO_GREATER_THAN_H

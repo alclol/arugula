@@ -20,3 +20,12 @@ TEST_CASE("L_MAX Morphisms functor") {
    res += res1;
    REQUIRE(res.reveal());
 }
+
+TEST_CASE("+= Morphisms functor") {
+   Lattice l1(static_cast<int>(10),Max{});
+   Lattice goal(static_cast<int>(12),Max{});
+   auto res = add_delta(l1, static_cast<int>(5));
+   REQUIRE(res.reveal() == 15);
+   res = deduct_delta(l1, static_cast<int>(5));
+   REQUIRE(res.reveal() == 5);
+}
