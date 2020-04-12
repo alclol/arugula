@@ -6,3 +6,4 @@ build/
 **/cmake-*
 **/.idea/*
 *.xml
+**/.vs/*

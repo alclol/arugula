@@ -11,6 +11,7 @@ add_library(arugula_lib INTERFACE)
 target_include_directories(arugula_lib INTERFACE include/)
 target_include_directories(arugula_lib INTERFACE include/merges)
 target_include_directories(arugula_lib INTERFACE include/utils)
+target_include_directories(arugula_lib INTERFACE include/morphisms)
 
 add_subdirectory(test)
 

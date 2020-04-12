@@ -6,6 +6,7 @@
 #include "merges/setop_mrg.hpp"
 #include "merges/boolean_mrg.hpp"
 #include "merges/lww_mrg.hpp"
+#include "morphisms/greater_than.hpp"
 
 TEST_CASE("L_MAX Morphisms") {
    Lattice f(false, Or{});
