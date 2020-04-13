@@ -6,16 +6,60 @@
 #include "merges/setop_mrg.hpp"
 #include "merges/boolean_mrg.hpp"
 #include "merges/lww_mrg.hpp"
-#include "morphisms/greater_than.hpp"
+#include "morphisms/transformer.hpp"
 
-TEST_CASE("L_MAX Morphisms") {
+TEST_CASE("L_MAX Morphisms functor") {
    Lattice l1(static_cast<int>(10),Max{});
-   Lattice<bool, Or> res = greater_than(l1, 12);
+   Lattice goal(static_cast<int>(12),Max{});
+   auto gt = CompareTransformer(std::cref(goal), std::cref(l1));
+   Lattice<bool, Or> res = gt.greater_than();
    REQUIRE(!res.reveal());
    Lattice l2(static_cast<int>(16),Max{});
    l1 += l2;
-   auto res1 = greater_than(l1, 12);
-   res += res1.reveal();
-//   res = res + res1;
+   auto res1 = gt.greater_than();
+   res += res1;
    REQUIRE(res.reveal());
+}
+
+TEST_CASE("+= Morphisms") {
+   Lattice l1(static_cast<int>(10),Max{});
+   Lattice goal(static_cast<int>(12),Max{});
+   auto res = add_delta(l1, static_cast<int>(5));
+   REQUIRE(res.reveal() == 15);
+   res = deduct_delta(l1, static_cast<int>(5));
+   REQUIRE(res.reveal() == 5);
+}
+
+TEST_CASE(" set intersect") {
+   Lattice ls(std::set<int>{2, 1, 19, 30}, Union{});
+   Lattice rs(std::set<int>{2, 3, 4, 19}, Union{});
+   auto inter = intersect(std::ref(ls), std::ref(rs));
+   REQUIRE(inter.reveal().size() == 2);
+   for (auto i : {19,2}) {
+      REQUIRE(ls.reveal().count(i));
+   }
+}
+
+TEST_CASE("Contains") {
+   Lattice ls(std::set<int>{2, 1, 19, 30}, Union{});
+   Lattice rs(std::set<int>{2, 3, 4, 19}, Union{});
+//   auto res = contains(std::ref(ls), std::ref(rs));
+   auto res = contains(std::ref(ls), 19);
+   REQUIRE(res.reveal());
+}
+
+TEST_CASE("Size") {
+   Lattice ls(std::set<int>{2, 1, 19, 30}, Union{});
+   Lattice rs(std::set<int>{2, 3, 4, 19}, Union{});
+//   auto res = contains(std::ref(ls), std::ref(rs));
+   auto res = size(std::ref(ls));
+   REQUIRE(res.reveal() == 4);
+}
+
+TEST_CASE("At") {
+   std::map<std::string, Lattice<int, Max>> leftm = {{"xx", Lattice(2, Max{})},
+                                                     {"yy", Lattice(4, Max{})}};
+   Lattice lm2(leftm, MapUnion{});
+   auto res = At(lm2, static_cast<std::string>("xx"));
+   REQUIRE(res.reveal() == 2);
 }
