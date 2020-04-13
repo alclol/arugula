@@ -21,11 +21,21 @@ TEST_CASE("L_MAX Morphisms functor") {
    REQUIRE(res.reveal());
 }
 
-TEST_CASE("+= Morphisms functor") {
+TEST_CASE("+= Morphisms") {
    Lattice l1(static_cast<int>(10),Max{});
    Lattice goal(static_cast<int>(12),Max{});
    auto res = add_delta(l1, static_cast<int>(5));
    REQUIRE(res.reveal() == 15);
    res = deduct_delta(l1, static_cast<int>(5));
    REQUIRE(res.reveal() == 5);
+}
+
+TEST_CASE(" set intersect") {
+   Lattice ls(std::set<int>{2, 1, 19, 30}, Union{});
+   Lattice rs(std::set<int>{2, 3, 4, 19}, Union{});
+   auto inter = intersect(std::ref(ls), std::ref(rs));
+   REQUIRE(inter.reveal().size() == 2);
+   for (auto i : {19,2}) {
+      REQUIRE(ls.reveal().count(i));
+   }
 }

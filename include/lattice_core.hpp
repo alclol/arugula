@@ -65,7 +65,7 @@ public:
 
   // These operators break lattice semantics!
   const T& reveal() const { return (val); }
-  T& reveal_true() const { return (val); }
+  std::reference_wrapper<const T> reveal_ref() const { return std::cref(val); }
   void wrap(T&& v) { val = std::move(v); }
   void assign(const T& v) { val = v; }
   void operator=(const T& v) { assign(v); };
