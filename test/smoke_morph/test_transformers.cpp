@@ -40,6 +40,7 @@ TEST_CASE(" set intersect") {
    }
 }
 
+
 int return_sum(int a, int b, int c) {
     return a + b + c;
 }
@@ -55,4 +56,28 @@ TEST_CASE("set project") {
     Lattice lset(std::set<int>{2, 1, 3}, Union{});
     std::set<int> result = project(lset, return_sum, 2, 3).reveal();
     REQUIRE(result == std::set<int>{7, 6, 8});
+
+TEST_CASE("Contains") {
+   Lattice ls(std::set<int>{2, 1, 19, 30}, Union{});
+   Lattice rs(std::set<int>{2, 3, 4, 19}, Union{});
+//   auto res = contains(std::ref(ls), std::ref(rs));
+   auto res = contains(std::ref(ls), 19);
+   REQUIRE(res.reveal());
+}
+
+TEST_CASE("Size") {
+   Lattice ls(std::set<int>{2, 1, 19, 30}, Union{});
+   Lattice rs(std::set<int>{2, 3, 4, 19}, Union{});
+//   auto res = contains(std::ref(ls), std::ref(rs));
+   auto res = size(std::ref(ls));
+   REQUIRE(res.reveal() == 4);
+}
+
+TEST_CASE("At") {
+   std::map<std::string, Lattice<int, Max>> leftm = {{"xx", Lattice(2, Max{})},
+                                                     {"yy", Lattice(4, Max{})}};
+   Lattice lm2(leftm, MapUnion{});
+   auto res = At(lm2, static_cast<std::string>("xx"));
+   REQUIRE(res.reveal() == 2);
+
 }

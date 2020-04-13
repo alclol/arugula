@@ -8,10 +8,11 @@
 // Has not been tuned for memory or performance efficiency
 
 #include <iostream>
+#include <merges/maxmin_mrg.hpp>
 #include "binexpr.hpp"
 #include "utils/is_container.hpp"
 #include "utils/ptr_compare.hpp"
-
+#include "merges/boolean_mrg.hpp"
 
 template<class T, class Func>
 struct Lattice
@@ -94,25 +95,6 @@ public:
       return this->reveal() == rhs.reveal();
   }
   bool operator!=(const Lattice<T, Func>& rhs) const { return !(operator==(rhs)); }
-
-//  friend std::ostream& operator<<(std::ostream& os, const Lattice<T, Func>& l) {
-//    os << "[" << (l.reveal()) << ", " << l.merge_op() << "]";
-//    return os;
-//  }
-
-//  typedef struct MaxStruct Max;
-//  typedef struct MinStruct Min;
-//  typedef struct OrStruct Or;
-//  typedef struct AndStruct And;
-//  typedef struct UnionStruct Union;
-//  typedef struct MapUnionStruct MapUnion;
-//  typedef struct CausalMergeStruct CausalMerge;
-//
-//  template <class K, class vT, class Q = T, class QFunc = Func>
-//  typename std::enable_if_t<std::is_same<Q, std::map<K, vT>>::value&& std::is_same<QFunc, MapUnion>::value, vT>
-//  At(K key) {
-//      return this->reveal().at(key);
-//  }
 
   //idom : for kvs use only
 //  template <class tuple_first, class tuple_second, class Q = T, class QFunc = Func>
