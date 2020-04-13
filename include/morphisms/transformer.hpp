@@ -99,10 +99,9 @@ size(std::reference_wrapper<Lattice<T, Func>> target) {
 }
 
 //for lmap only
-template <class K, class vT, class T, class Func>
-std::enable_if_t<std::is_same<T, std::map<K, vT>>::value && std::is_same<Func, MapUnion>::value, vT>
-At(std::reference_wrapper<Lattice<T, Func>> target, K key) {
-// At(std::reference_wrapper<Lattice<T, Func>> target, K key) {
-   return target->reveal_ref().at(key);
+template <class K, class vT, class Func>
+std::enable_if_t<std::is_same<Func, MapUnion>::value, vT>
+At(Lattice<std::map<K, vT>, Func>& target, K key) {
+   return target.reveal().at(key);
 }
 #endif //MANGO_GREATER_THAN_H
