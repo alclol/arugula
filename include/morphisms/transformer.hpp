@@ -114,6 +114,17 @@ project(Lattice<std::set<V>, Func> lset, V(&blk) (V, aTypes ...), aTypes ... arg
     return Lattice(result, Func{});
 }
 
+template<class K, class V, class ... aTypes>
+Lattice<std::map<K, V>, MapUnion>
+project(std::reference_wrapper<Lattice<std::map<K, V>, MapUnion>> lmap, V(&blk) (V, aTypes ...), aTypes ... args) {
+    std::map<K, V> original_map = lmap.get().reveal();
+    std::map<K, V> result;
+    for (auto const& [key, value] : original_map) {
+        result.insert(std::pair<K, V>(key, blk(value, args...)));
+    }
+    return Lattice(result, MapUnion{});
+}
+
 template <class T, class Func>
 std::enable_if_t<is_stl_container<T>::value, Lattice<bool, Or>>
 contains( std::reference_wrapper<Lattice<T, Func>> target, typename T::value_type val) {
