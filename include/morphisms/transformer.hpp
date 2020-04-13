@@ -117,9 +117,9 @@ project(Lattice<std::set<V>, Func> lset, V(&blk) (V, aTypes ...), aTypes ... arg
 template<class K, class V, class ... aTypes>
 Lattice<std::map<K, V>, MapUnion>
 project(std::reference_wrapper<Lattice<std::map<K, V>, MapUnion>> lmap, V(&blk) (V, aTypes ...), aTypes ... args) {
-    std::map<K, V> original_map = lmap.get().reveal();
+    std::reference_wrapper <const std::map<K, V>> original_map = lmap.get().reveal_ref();
     std::map<K, V> result;
-    for (auto const& [key, value] : original_map) {
+    for (auto const& [key, value] : original_map.get()) {
         result.insert(std::pair<K, V>(key, blk(value, args...)));
     }
     return Lattice(result, MapUnion{});
