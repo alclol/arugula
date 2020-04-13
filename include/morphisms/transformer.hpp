@@ -50,11 +50,6 @@ public:
     }
 };
 
-template <class Func, class T>
-typename std::enable_if_t< std::is_same<Func, Max>::value, Lattice<bool, T> >
-greater_than(Lattice<T, Func> obj, T n) {
-   return Lattice(obj.reveal()>n, Or{});
-}
 
 template <class T, class Func>
 typename std::enable_if_t<
@@ -66,8 +61,8 @@ add_delta (const Lattice<T, Func>& target, const T& delta) {
 }
 
 template <class T, class Func>
-typename std::enable_if_t<
-        TempOr<std::is_same<Func, Max>::value, std::is_same<Func, Min>::value>::val,
+std::enable_if_t<
+        std::is_same<Func, Max>::value || std::is_same<Func, Min>::value,
         Lattice<T, Func> >
 deduct_delta (const Lattice<T, Func>& target, const T& delta) {
    T data = target.reveal() - delta;
@@ -76,7 +71,7 @@ deduct_delta (const Lattice<T, Func>& target, const T& delta) {
 
 // currently only working with ordered map/set
 template <class T, class Func>
-typename std::enable_if_t<is_stl_container<T>::value, Lattice<T, Func>>
+std::enable_if_t<is_stl_container<T>::value, Lattice<T, Func>>
 intersect( std::reference_wrapper<Lattice<T, Func>> s1,
            std::reference_wrapper<Lattice<T, Func>> s2) {
    // IDE not able to handle such complicated macro..
@@ -90,4 +85,22 @@ intersect( std::reference_wrapper<Lattice<T, Func>> s1,
    return Lattice(res, Func{});
 }
 
+template <class T, class Func>
+std::enable_if_t<is_stl_container<T>::value, Lattice<bool, Or>>
+contains( std::reference_wrapper<Lattice<T, Func>> target, typename T::value_type val) {
+   return Lattice(target.get().reveal_ref().get().count(val) > 0, Or{});
+}
+
+template <class T, class Func>
+std::enable_if_t<is_stl_container<T>::value, Lattice<int, Max>>
+size(std::reference_wrapper<Lattice<T, Func>> target) {
+   return Lattice(static_cast<int>(target.get().reveal().size()), Max{});
+}
+
+//for lmap only
+//template <class K, class vT, class Q = T, class QFunc = Func>
+//typename std::enable_if_t<std::is_same<Q, std::map<K, vT>>::value&& std::is_same<QFunc, MapUnion>::value, vT>
+//At(K key) {
+//   return this->reveal().at(key);
+//}
 #endif //MANGO_GREATER_THAN_H

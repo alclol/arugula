@@ -39,3 +39,19 @@ TEST_CASE(" set intersect") {
       REQUIRE(ls.reveal().count(i));
    }
 }
+
+TEST_CASE("Contains") {
+   Lattice ls(std::set<int>{2, 1, 19, 30}, Union{});
+   Lattice rs(std::set<int>{2, 3, 4, 19}, Union{});
+//   auto res = contains(std::ref(ls), std::ref(rs));
+   auto res = contains(std::ref(ls), 19);
+   REQUIRE(res.reveal());
+}
+
+TEST_CASE("Size") {
+   Lattice ls(std::set<int>{2, 1, 19, 30}, Union{});
+   Lattice rs(std::set<int>{2, 3, 4, 19}, Union{});
+//   auto res = contains(std::ref(ls), std::ref(rs));
+   auto res = size(std::ref(ls));
+   REQUIRE(res.reveal() == 4);
+}

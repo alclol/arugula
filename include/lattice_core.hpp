@@ -8,9 +8,11 @@
 // Has not been tuned for memory or performance efficiency
 
 #include <iostream>
+#include <merges/maxmin_mrg.hpp>
 #include "binexpr.hpp"
 #include "utils/is_container.hpp"
 #include "utils/ptr_compare.hpp"
+#include "merges/boolean_mrg.hpp"
 
 
 template<class T, class Func>
@@ -99,14 +101,11 @@ public:
 //    os << "[" << (l.reveal()) << ", " << l.merge_op() << "]";
 //    return os;
 //  }
+// typename std::enable_if_t< std::is_same<Func, Max>::value, Lattice<bool, T> >
+// greater_than(Lattice<T, Func> obj, T n) {
+//    return Lattice(obj.reveal()>n, Or{});
+// }
 
-//  typedef struct MaxStruct Max;
-//  typedef struct MinStruct Min;
-//  typedef struct OrStruct Or;
-//  typedef struct AndStruct And;
-//  typedef struct UnionStruct Union;
-//  typedef struct MapUnionStruct MapUnion;
-//  typedef struct CausalMergeStruct CausalMerge;
 //
 //  template <class K, class vT, class Q = T, class QFunc = Func>
 //  typename std::enable_if_t<std::is_same<Q, std::map<K, vT>>::value&& std::is_same<QFunc, MapUnion>::value, vT>
