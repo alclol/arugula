@@ -4,6 +4,7 @@
 #include <utils/is_container.hpp>
 #include "lattice_core.hpp"
 #include "merges/boolean_mrg.hpp"
+#include "merges/maxmin_mrg.hpp"
 
 #ifndef MANGO_GREATER_THAN_H
 #define MANGO_GREATER_THAN_H
@@ -88,6 +89,31 @@ intersect( std::reference_wrapper<Lattice<T, Func>> s1,
            data2.begin(), data2.end(),
            std::inserter(res, res.begin()));
    return Lattice(res, Func{});
+}
+
+template<class rType, class ... aTypes>
+rType
+when_true(Lattice<bool, Or> threshold, rType (&blk) (aTypes ...), aTypes ... args) {
+    if (threshold.reveal())
+        return blk(args...);
+}
+
+template<class rType, class ... aTypes>
+rType
+when_false(Lattice<bool, And> threshold, rType(&blk) (aTypes ...), aTypes ... args) {
+    if (!threshold.reveal())
+        return blk(args...);
+}
+
+template<class V, class Func, class ... aTypes>
+typename std::enable_if_t<std::is_same<Func, Union>::value || std::is_same<Func, Intersect>::value, Lattice<std::set<V>, Func>>
+project(Lattice<std::set<V>, Func> lset, V(&blk) (V, aTypes ...), aTypes ... args) {
+    std::set<V> original_set = lset.reveal();
+    std::set<V> result;
+    for (auto element : original_set) {
+        result.insert(blk(element, args...));
+    }
+    return Lattice(result, Func{});
 }
 
 #endif //MANGO_GREATER_THAN_H

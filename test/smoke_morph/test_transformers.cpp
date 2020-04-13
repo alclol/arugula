@@ -39,3 +39,20 @@ TEST_CASE(" set intersect") {
       REQUIRE(ls.reveal().count(i));
    }
 }
+
+int return_sum(int a, int b, int c) {
+    return a + b + c;
+}
+
+TEST_CASE("when true/false") {
+    Lattice thresholdTrue(true, Or{});
+    Lattice thresholdFalse(false, And{});
+    REQUIRE(when_true(thresholdTrue, return_sum, 1, 2, 3) == 6);
+    REQUIRE(when_false(thresholdFalse, return_sum, 1, 2, 3) == 6);
+}
+
+TEST_CASE("set project") {
+    Lattice lset(std::set<int>{2, 1, 3}, Union{});
+    std::set<int> result = project(lset, return_sum, 2, 3).reveal();
+    REQUIRE(result == std::set<int>{7, 6, 8});
+}
