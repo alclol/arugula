@@ -5,6 +5,7 @@
 #include <merges/map_mrg.hpp>
 #include "lattice_core.hpp"
 #include "merges/boolean_mrg.hpp"
+#include "merges/maxmin_mrg.hpp"
 
 #ifndef MANGO_GREATER_THAN_H
 #define MANGO_GREATER_THAN_H
@@ -86,6 +87,31 @@ intersect( std::reference_wrapper<Lattice<T, Func>> s1,
    return Lattice(res, Func{});
 }
 
+template<class rType, class ... aTypes>
+rType
+when_true(Lattice<bool, Or> threshold, rType (&blk) (aTypes ...), aTypes ... args) {
+    if (threshold.reveal())
+        return blk(args...);
+}
+
+template<class rType, class ... aTypes>
+rType
+when_false(Lattice<bool, And> threshold, rType(&blk) (aTypes ...), aTypes ... args) {
+    if (!threshold.reveal())
+        return blk(args...);
+}
+
+template<class V, class Func, class ... aTypes>
+typename std::enable_if_t<std::is_same<Func, Union>::value || std::is_same<Func, Intersect>::value, Lattice<std::set<V>, Func>>
+project(Lattice<std::set<V>, Func> lset, V(&blk) (V, aTypes ...), aTypes ... args) {
+    std::set<V> original_set = lset.reveal();
+    std::set<V> result;
+    for (auto element : original_set) {
+        result.insert(blk(element, args...));
+    }
+    return Lattice(result, Func{});
+}
+
 template <class T, class Func>
 std::enable_if_t<is_stl_container<T>::value, Lattice<bool, Or>>
 contains( std::reference_wrapper<Lattice<T, Func>> target, typename T::value_type val) {
@@ -104,4 +130,5 @@ std::enable_if_t<std::is_same<Func, MapUnion>::value, vT>
 At(Lattice<std::map<K, vT>, Func>& target, K key) {
    return target.reveal().at(key);
 }
+
 #endif //MANGO_GREATER_THAN_H
