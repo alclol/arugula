@@ -46,16 +46,22 @@ int return_sum(int a, int b, int c) {
 }
 
 TEST_CASE("when true/false") {
-    Lattice thresholdTrue(true, Or{});
-    Lattice thresholdFalse(false, And{});
-    REQUIRE(when_true(thresholdTrue, return_sum, 1, 2, 3) == 6);
-    REQUIRE(when_false(thresholdFalse, return_sum, 1, 2, 3) == 6);
+   Lattice thresholdTrue(true, Or{});
+   Lattice OrFalse(false, Or{});
+   Lattice thresholdFalse(false, And{});
+   Lattice AndTrue(true, And{});
+   // when_true(thresholdFalse, static_cast<int>(999), return_sum, 1, 2, 3);
+   REQUIRE(when_true(OrFalse, -999, return_sum, 1, 2, 3) == -999);
+   REQUIRE(when_true(thresholdTrue, -999, return_sum, 1, 2, 3) == 6);
+   REQUIRE(when_false(thresholdFalse, -1, return_sum, 1, 2, 3) == 6);
+   REQUIRE(when_false(AndTrue, -1, return_sum, 1, 2, 3) == -1);
 }
 
 TEST_CASE("set project") {
-    Lattice lset(std::set<int>{2, 1, 3}, Union{});
-    std::set<int> result = project(lset, return_sum, 2, 3).reveal();
-    REQUIRE(result == std::set<int>{7, 6, 8});
+   Lattice lset(std::set<int>{2, 1, 3}, Union{});
+   std::set<int> result = project(lset, return_sum, 2, 3).reveal();
+   REQUIRE(result == std::set<int>{7, 6, 8});
+}
 
 TEST_CASE("Contains") {
    Lattice ls(std::set<int>{2, 1, 19, 30}, Union{});

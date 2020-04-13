@@ -89,16 +89,18 @@ intersect( std::reference_wrapper<Lattice<T, Func>> s1,
 
 template<class rType, class ... aTypes>
 rType
-when_true(Lattice<bool, Or> threshold, rType (&blk) (aTypes ...), aTypes ... args) {
+when_true(Lattice<bool, Or> threshold, rType flag, rType (&blk) (aTypes ...), aTypes ... args)  {
     if (threshold.reveal())
         return blk(args...);
+    return flag;
 }
 
 template<class rType, class ... aTypes>
 rType
-when_false(Lattice<bool, And> threshold, rType(&blk) (aTypes ...), aTypes ... args) {
+when_false(Lattice<bool, And> threshold, rType flag, rType(&blk) (aTypes ...), aTypes ... args) {
     if (!threshold.reveal())
         return blk(args...);
+    return flag;
 }
 
 template<class V, class Func, class ... aTypes>
