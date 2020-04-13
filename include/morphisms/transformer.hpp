@@ -2,6 +2,7 @@
 // Created by alclol on 4/12/20.
 //
 #include <utils/is_container.hpp>
+#include <merges/map_mrg.hpp>
 #include "lattice_core.hpp"
 #include "merges/boolean_mrg.hpp"
 
@@ -98,9 +99,10 @@ size(std::reference_wrapper<Lattice<T, Func>> target) {
 }
 
 //for lmap only
-//template <class K, class vT, class Q = T, class QFunc = Func>
-//typename std::enable_if_t<std::is_same<Q, std::map<K, vT>>::value&& std::is_same<QFunc, MapUnion>::value, vT>
-//At(K key) {
-//   return this->reveal().at(key);
-//}
+template <class K, class vT, class T, class Func>
+std::enable_if_t<std::is_same<T, std::map<K, vT>>::value && std::is_same<Func, MapUnion>::value, vT>
+At(std::reference_wrapper<Lattice<T, Func>> target, K key) {
+// At(std::reference_wrapper<Lattice<T, Func>> target, K key) {
+   return target->reveal_ref().at(key);
+}
 #endif //MANGO_GREATER_THAN_H

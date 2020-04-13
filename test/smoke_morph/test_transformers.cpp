@@ -55,3 +55,11 @@ TEST_CASE("Size") {
    auto res = size(std::ref(ls));
    REQUIRE(res.reveal() == 4);
 }
+
+TEST_CASE("At") {
+   std::map<std::string, Lattice<int, Max>> leftm = {{"x", Lattice(2, Max{})},
+                                                     {"y", Lattice(4, Max{})}};
+   Lattice lm2(leftm, MapUnion{});
+   auto res = At(std::ref(lm2), "x");
+   REQUIRE(res.reveal() == 4);
+}
