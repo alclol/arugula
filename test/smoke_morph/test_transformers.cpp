@@ -6,6 +6,8 @@
 #include "merges/setop_mrg.hpp"
 #include "merges/boolean_mrg.hpp"
 #include "merges/lww_mrg.hpp"
+#include "merges/vector_clock_mrg.hpp"
+#include "merges/causal_mrg.hpp"
 #include "morphisms/transformer.hpp"
 
 TEST_CASE("L_MAX Morphisms functor") {
@@ -61,13 +63,22 @@ TEST_CASE("set project") {
    Lattice lset(std::set<int>{2, 1, 3}, Union{});
    std::set<int> result = project(lset, return_sum, 2, 3).reveal();
    REQUIRE(result == std::set<int>{7, 6, 8});
+   REQUIRE(lset.reveal() == std::set<int>{2, 1, 3});
 }
 
 TEST_CASE("map project") {
-    Lattice lmap(std::map<std::string, int>{ {"xx", 2}, { "yy", 3 }}, MapUnion{});
+    std::map<std::string, int> test_map = { {"xx", 2}, { "yy", 3 } };
+    std::map<std::string, int> original(test_map);
+    Lattice lmap(test_map, MapUnion{});
     std::map<std::string, int> expected = { {"xx", 7}, {"yy", 8} };
     std::map<std::string, int> result = project(std::ref(lmap), return_sum, 2, 3).reveal();
     REQUIRE(result == expected);
+    REQUIRE(lmap.reveal() == original);
+}
+
+TEST_CASE("map key_set") {
+    Lattice lmap(std::map<std::string, int>{ {"xx", 1}, { "yy", 2 }, { "zz", 3 }}, MapUnion{});
+    REQUIRE(key_set(lmap).reveal() == std::set<std::string>{"xx", "yy", "zz"});
 }
 
 
