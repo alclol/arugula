@@ -106,3 +106,14 @@ TEST_CASE("At") {
    REQUIRE(res.reveal() == 2);
 
 }
+
+TEST_CASE("get_value") {
+    VectorClock vc1({ {"x", Lattice(static_cast<unsigned>(2), Max{})},
+                   {"y", Lattice(static_cast<unsigned>(4), Max{})} });
+    Lattice<std::tuple<VectorClock, Lattice<int, Max>>, CausalMerge> l1(std::make_tuple(vc1, Lattice(10, Max{})), CausalMerge{});
+    auto result = get_value(l1);
+    REQUIRE(result.reveal() == 10);
+    //the return of get_value should make a copy
+    result = 100;
+    REQUIRE(std::get<1>(l1.reveal()).reveal() == 10);
+}
