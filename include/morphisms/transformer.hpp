@@ -89,13 +89,13 @@ intersect( const std::reference_wrapper<Lattice<T, Func>> s1,
 
 template<class rType, class ... aTypes>
 rType
-when_true(const Lattice<bool, Or> threshold, rType flag, rType (&blk) (aTypes ...), aTypes ... args)  {
+when_true(const Lattice<bool, Or>& threshold, rType flag, rType (&blk) (aTypes ...), aTypes ... args)  {
    return threshold.reveal()? blk(args...) : flag;
 }
 
 template<class rType, class ... aTypes>
 rType
-when_false(const Lattice<bool, And> threshold, rType flag, rType(&blk) (aTypes ...), aTypes ... args) {
+when_false(const Lattice<bool, And>& threshold, rType flag, rType(&blk) (aTypes ...), aTypes ... args) {
    return (threshold.reveal()? blk(args...) : flag);
 }
 
@@ -103,7 +103,7 @@ when_false(const Lattice<bool, And> threshold, rType flag, rType(&blk) (aTypes .
 template<class V, class Func, class ... aTypes>
 typename std::enable_if_t<std::is_same<Func, Union>::value || std::is_same<Func, Intersect>::value,
                           Lattice<std::set<V>, Func>>
-project(const Lattice<std::set<V>, Func> lset, V(&blk) (V, aTypes ...), aTypes ... args) {
+project(const Lattice<std::set<V>, Func>& lset, V(&blk) (V, aTypes ...), aTypes ... args) {
     auto original = lset.reveal_ref().get();
     std::set<V> result;
     for (auto element : original) {
