@@ -8,11 +8,9 @@
 // Has not been tuned for memory or performance efficiency
 
 #include <iostream>
-#include <merges/maxmin_mrg.hpp>
 #include "binexpr.hpp"
 #include "utils/is_container.hpp"
 #include "utils/ptr_compare.hpp"
-#include "merges/boolean_mrg.hpp"
 
 template<class T, class Func>
 struct Lattice

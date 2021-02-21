@@ -1,11 +1,14 @@
 //
 // Created by alclol on 4/12/20.
 //
-#include <utils/is_container.hpp>
-#include <merges/map_mrg.hpp>
+#include "utils/is_container.hpp"
 #include "lattice_core.hpp"
 #include "merges/boolean_mrg.hpp"
 #include "merges/maxmin_mrg.hpp"
+#include "merges/map_mrg.hpp"
+#include "merges/setop_mrg.hpp"
+#include "merges/vector_clock_mrg.hpp"
+#include "merges/causal_mrg.hpp"
 
 #ifndef MANGO_GREATER_THAN_H
 #define MANGO_GREATER_THAN_H
@@ -124,6 +127,17 @@ project(const std::reference_wrapper<Lattice<std::map<K, V>, MapUnion>> lmap,
     return Lattice(copy, MapUnion{});
 }
 
+template<class K, class V>
+Lattice<std::set<K>, Union>
+key_set(const Lattice<std::map<K, V>, MapUnion> lmap) {
+    std::set<K> result;
+    auto map_ref = lmap.reveal_ref().get();
+    for (auto const& [key, _] : map_ref) {
+        result.insert(key);
+    }
+    return Lattice(result, Union{});
+}
+
 template <class T, class Func>
 std::enable_if_t<is_stl_container<T>::value, Lattice<bool, Or>>
 contains(const std::reference_wrapper<Lattice<T, Func>> target, typename T::value_type val) {
@@ -141,6 +155,14 @@ template <class K, class vT, class Func>
 std::enable_if_t<std::is_same<Func, MapUnion>::value, vT>
 At(const Lattice<std::map<K, vT>, Func>& target, K key) {
    return target.reveal().at(key);
+}
+
+//for idom lattice only
+template<class T, class Func>
+Lattice<T, Func>
+get_value(const Lattice<std::tuple<VectorClock, Lattice<T, Func>>, CausalMerge> idom) {
+    auto tuple_ref = idom.reveal_ref().get();
+    return std::get<1>(tuple_ref);
 }
 
 #endif //MANGO_GREATER_THAN_H
